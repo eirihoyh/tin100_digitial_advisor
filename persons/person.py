@@ -29,3 +29,36 @@ class Person:
             amount += self.budget_setup[key]
 
         return amount <= self.avrg_income
+
+
+class Student(Person):
+    def __init__(self, nr_people: int,
+                 avrg_income: Union[str, float],
+                 monthly_debt: Union[str, float]) -> None:
+
+        super().__init__(nr_people=nr_people,
+                         avrg_income=avrg_income,
+                         monthly_debt=monthly_debt,
+                         status_constant=1.25)
+
+
+class Family(Person):
+    def __init__(self, nr_people: int,
+                 avrg_income: Union[str, float],
+                 monthly_debt: Union[str, float]) -> None:
+        
+        super().__init__(nr_people=nr_people,
+                         avrg_income=avrg_income,
+                         monthly_debt=monthly_debt,
+                         status_constant=1)
+
+
+class Retired(Person):
+    def __init__(self, nr_people: int,
+                 avrg_income: Union[str, float],
+                 monthly_debt: Union[str, float]) -> None:
+
+        super().__init__(nr_people=nr_people,
+                         avrg_income=avrg_income,
+                         monthly_debt=monthly_debt,
+                         status_constant=0.75)
