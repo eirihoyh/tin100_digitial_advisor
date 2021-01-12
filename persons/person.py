@@ -1,26 +1,31 @@
-from typing import Dict
+from typing import Union
 
 
 class Person:
-    def __init__(self):
-        """
-        age
-        gender
-        status (student, married etc)
-        estimated sallary (mabye? need to see if I can find it by using api)
-        """
-        pass
+    budget_setup = {
+        "Food/drinks": 0,
+        "Clothing": 0,
+        "Travell": 0,
+        "Payments": 0,
+        "Buffer account": 0,
+        "Freetime": 0
+    }
 
-    def make_a_budget(self) -> Dict:
-        """
-        Will automatically make a budget. We need to make different catagories that the
-        user can relate to.
-        :return:
-        """
-        pass
+    def __init__(self, nr_people: int,
+                 avrg_income: Union[str, float],
+                 monthly_debt: Union[str, float],
+                 status_constant: Union[str, float]) -> None:
+        self.nr_people = nr_people
+        self.avrg_income = avrg_income
+        self.monthly_debt = monthly_debt
+        self.status_constant = status_constant
 
-    def do_changes_to_budget(self) -> None:
-        pass
+    def calculate_budget(self) -> None:
+        self.budget_setup["Clothing"] = self.nr_people * self.status_constant
 
     def check_if_beyond_salary(self) -> bool:
-        pass
+        amount = 0
+        for key in self.budget_setup:
+            amount += self.budget_setup[key]
+
+        return amount <= self.avrg_income
