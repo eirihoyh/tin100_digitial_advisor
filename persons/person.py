@@ -12,8 +12,8 @@ class Person:
     }
 
     def __init__(self, nr_people: int,
-                 avrg_income: Union[str, float],
-                 monthly_debt: Union[str, float]) -> None:
+                 avrg_income: Union[int, float],
+                 monthly_debt: Union[int, float]) -> None:
 
         self.nr_people = nr_people
         self.avrg_income = avrg_income
@@ -47,12 +47,12 @@ class Student(Person):
                          monthly_debt=monthly_debt)
 
     def calculate_budget(self) -> None:
-        self.budget_setup["Food/drinks"] = 3000 * self.status_constant *
+        self.budget_setup["Food/drinks"] = 3000 * self.status_constant * self.nr_people
         self.budget_setup["Payments"] = self.monthly_debt
         self.budget_setup["Clothing"] = 500 * self.status_constant * (1 + (self.nr_people/2))
         self.budget_setup["Travel"] = 500 * self.status_constant * (1 + (self.nr_people/2))
         self.budget_setup["Freetime"] = 500 * self.status_constant * (1 + (self.nr_people/2))
-
+        self.budget_setup["Buffer account"] = 500 * self.status_constant * (1 + (self.nr_people/2))
 
 
 class Family(Person):
@@ -60,35 +60,40 @@ class Family(Person):
     status_constant = 1.5
 
     def __init__(self, nr_people: int,
-                 avrg_income: Union[str, float],
-                 monthly_debt: Union[str, float]) -> None:
+                 avrg_income: Union[int, float],
+                 monthly_debt: Union[int, float]) -> None:
 
         super().__init__(nr_people=nr_people,
                          avrg_income=avrg_income,
                          monthly_debt=monthly_debt)
 
     def calculate_budget(self) -> None:
-        self.budget_setup["Food/drinks"] = 3500 * self.status_constant * self.nr_people
+        self.budget_setup["Food/drinks"] = 3000 * self.status_constant * self.nr_people
         self.budget_setup["Payments"] = self.monthly_debt
-        self.budget_setup["Clothing"] = 500* self.nr_people * self.status_constant
-        self.budget_setup["Travel"] =
+        self.budget_setup["Clothing"] = 500 * self.status_constant * (1 + (self.nr_people / 2))
+        self.budget_setup["Travel"] = 500 * self.status_constant * (1 + (self.nr_people / 2))
+        self.budget_setup["Freetime"] = 500 * self.status_constant * (1 + (self.nr_people / 2))
+        self.budget_setup["Buffer account"] = 500 * self.status_constant * (
+                    1 + (self.nr_people / 2))
 
 
 class Retired(Person):
 
     status_constant = 0.75
 
-    def __init__(self, nr_people: int,
-                 avrg_income: Union[str, float],
-                 monthly_debt: Union[str, float]) -> None:
+    def __init__(self, nr_people: Union[int, float],
+                 avrg_income: Union[int, float],
+                 monthly_debt: Union[int, float]) -> None:
 
         super().__init__(nr_people=nr_people,
                          avrg_income=avrg_income,
                          monthly_debt=monthly_debt)
 
     def calculate_budget(self) -> None:
-        self.budget_setup["Food/drinks"] = 3500 * self.status_constant * self.nr_people
+        self.budget_setup["Food/drinks"] = 3000 * self.status_constant * self.nr_people
         self.budget_setup["Payments"] = self.monthly_debt
-        self.budget_setup["Clothing"] = 1000* self.nr_people * self.status_constant
-        self.budget_setup["Travel"] =
-
+        self.budget_setup["Clothing"] = 500 * self.status_constant * (1 + (self.nr_people / 2))
+        self.budget_setup["Travel"] = 500 * self.status_constant * (1 + (self.nr_people / 2))
+        self.budget_setup["Freetime"] = 500 * self.status_constant * (1 + (self.nr_people / 2))
+        self.budget_setup["Buffer account"] = 500 * self.status_constant * (
+                    1 + (self.nr_people / 2))
