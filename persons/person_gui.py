@@ -1,6 +1,8 @@
 import tkinter as tk
 from tkinter import ttk
 
+from person import Student, Family, Retired
+
 root = tk.Tk()
 root.title("Information about user")
 
@@ -86,11 +88,34 @@ kr_label2.grid(row=3, column=2, sticky='w')
 
 # ---------------calculation buttons---------------
 
+
+def calc_budget():
+    status = my_combo.get()
+    nr_of_people = int(label_members["text"])
+    avrg_income = income_entry.get()
+    debt = loan_entry.get()
+
+    if status == "Student":
+        person = Student(nr_of_people, avrg_income, debt)
+        suggest_budget = person.calculate_budget()
+
+    elif status == "Family":
+        person = Family(nr_of_people, avrg_income, debt)
+        suggest_budget = person.calculate_budget()
+    else:
+        person = Retired(nr_of_people, avrg_income, debt)
+        suggest_budget = person.calculate_budget()
+
+    for key in budget_setup:
+        budget_setup[key].delete(0, tk.END)
+        budget_setup[key].insert(0, suggest_budget[key])
+
+
 calc_frame = tk.Frame(master=root, borderwidth=5)
 calc_frame.grid(row=1, column=0)
 
 calc_button = tk.Button(master=calc_frame, text="Calculate budget",
-                        relief=tk.RAISED, borderwidth=5)
+                        relief=tk.RAISED, borderwidth=5, command=calc_budget)
 calc_button.pack()
 
 # ---------------budget part----------------------
@@ -115,8 +140,8 @@ for index, info in enumerate(budget_setup.keys()):
     label = tk.Label(master=budget_frame, text=info)
     label.grid(row=index, column=0, sticky="e", padx=10, pady=10)
 
-    entry = tk.Entry(master=budget_frame, width=50)
-    entry.grid(row=index, column=1, sticky="ew", padx=10, pady=10)
+    budget_setup[info] = tk.Entry(master=budget_frame, width=50, text=f"{info}")
+    budget_setup[info].grid(row=index, column=1, sticky="ew", padx=10, pady=10)
 
     kr_label = tk.Label(master=budget_frame, text="Kr")
     kr_label.grid(row=index, column=2, sticky='w')

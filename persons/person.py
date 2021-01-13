@@ -54,6 +54,8 @@ class Student(Person):
         self.budget_setup["Freetime"] = 500 * self.status_constant * (1 + (self.nr_people/2))
         self.budget_setup["Buffer account"] = 500 * self.status_constant * (1 + (self.nr_people/2))
 
+        return self.budget_setup
+
 
 class Family(Person):
 
@@ -76,6 +78,8 @@ class Family(Person):
         self.budget_setup["Buffer account"] = 500 * self.status_constant * (
                     1 + (self.nr_people / 2))
 
+        return self.budget_setup
+
 
 class Retired(Person):
 
@@ -96,4 +100,6 @@ class Retired(Person):
         self.budget_setup["Travel"] = 500 * self.status_constant * (1 + (self.nr_people / 2))
         self.budget_setup["Freetime"] = 500 * self.status_constant * (1 + (self.nr_people / 2))
         self.budget_setup["Buffer account"] = 500 * self.status_constant * (
-                    1 + (self.nr_people / 2))
+                1 + (self.nr_people / 2))
+
+        return self.budget_setup
