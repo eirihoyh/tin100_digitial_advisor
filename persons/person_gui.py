@@ -2,9 +2,67 @@ import tkinter as tk
 from tkinter import ttk
 
 from person import Student, Family, Retired
+from database_connecter import StoreInDatabase
 
-root = tk.Tk()
-root.title("Information about user")
+
+# -------Functions-------------
+def increase():
+    """
+    Increases number of people
+    """
+    value = int(label_members["text"])
+    if value < 10:
+        label_members["text"] = f"{value + 1}"
+
+
+def decrease():
+    """
+    Decreases number of people
+    """
+    value = int(label_members["text"])
+    if value > 1:
+        label_members["text"] = f"{value - 1}"
+
+
+def calc_budget():
+    """
+    A function that calculates an estimation for budget using superclass Person
+    """
+    status = my_combo.get()
+    nr_of_people = int(label_members["text"])
+    avrg_income = income_entry.get()
+    debt = loan_entry.get()
+
+    if status == "Student":
+        person = Student(nr_of_people, avrg_income, debt)
+
+    elif status == "Family":
+        person = Family(nr_of_people, avrg_income, debt)
+    else:
+        person = Retired(nr_of_people, avrg_income, debt)
+
+    suggest_budget = person.calculate_budget()
+
+    for key in budget_setup:
+        budget_setup[key].delete(0, tk.END)
+        budget_setup[key].insert(0, suggest_budget[key])
+
+
+def save_info():
+    """
+    function for save button that saves the budget
+    :return:
+    """
+    money = []
+    for key in budget_setup:
+        money.append(float(budget_setup[key].get()))
+
+    save = StoreInDatabase()
+    save.insert_data(money[0], money[1], money[2], money[3], money[4], money[5])
+    approval_label["text"] = "Saved!"
+
+
+# -------standard dictionaries----------
 
 wanted_information = {
     "Status:": ["Student", "Family", "Retired"],
@@ -12,6 +70,19 @@ wanted_information = {
     "Average monthly income:": 0,
     "Monthly debt payment:": 0
 }
+
+budget_setup = {
+    "Food/drinks": 0,
+    "Clothing": 0,
+    "Travel": 0,
+    "Payments": 0,
+    "Buffer account": 0,
+    "Freetime": 0
+}
+
+# -----------GUI begins----------------
+root = tk.Tk()
+root.title("Information about user")
 
 frame0 = tk.Frame(master=root, width=100, height=100, borderwidth=5, relief=tk.SUNKEN)
 frame0.grid(row=0, column=0)
@@ -27,7 +98,7 @@ for index, info in enumerate(wanted_information.keys()):
     label = tk.Label(master=frame0, text=info)
     label.grid(row=index, column=0, sticky="e", padx=10, pady=10)
 
-# ----------first question---------------
+# ----------first question: Status---------------
 
 label0 = tk.Label(master=frame0, text=f"{keys[0]}")
 label0.grid(row=0, column=1, sticky="e")
@@ -40,20 +111,7 @@ my_combo.current(0)
 my_combo.bind("<<ComboboxSelected>>")
 my_combo.grid(row=0, column=1, sticky="w")
 
-
-# ----------second question------------
-
-def increase():
-    value = int(label_members["text"])
-    if value < 10:
-        label_members["text"] = f"{value + 1}"
-
-
-def decrease():
-    value = int(label_members["text"])
-    if value > 1:
-        label_members["text"] = f"{value - 1}"
-
+# ----------second question: Nr of people------------
 
 label_members = tk.Label(master=frame0, text=f"{wanted_information[keys[1]]}", bg="white")
 label_members.grid(row=1, column=1, sticky="ew")
@@ -70,7 +128,7 @@ pluss_button.grid(row=0, column=0, sticky="nsew")
 minus_button = tk.Button(master=frame1, text="-", command=decrease)
 minus_button.grid(row=1, column=0, sticky="nsew")
 
-# ---------third question-------------
+# ---------third question: Salary-------------
 
 income_entry = tk.Entry(master=frame0)
 income_entry.grid(row=2, column=1)
@@ -78,7 +136,7 @@ income_entry.grid(row=2, column=1)
 kr_label1 = tk.Label(master=frame0, text="Kr")
 kr_label1.grid(row=2, column=2, sticky='w')
 
-# --------fourth question----------------
+# --------fourth question: Amount of loan----------------
 
 loan_entry = tk.Entry(master=frame0)
 loan_entry.grid(row=3, column=1)
@@ -86,29 +144,7 @@ loan_entry.grid(row=3, column=1)
 kr_label2 = tk.Label(master=frame0, text="Kr")
 kr_label2.grid(row=3, column=2, sticky='w')
 
-# ---------------calculation buttons---------------
-
-
-def calc_budget():
-    status = my_combo.get()
-    nr_of_people = int(label_members["text"])
-    avrg_income = income_entry.get()
-    debt = loan_entry.get()
-
-    if status == "Student":
-        person = Student(nr_of_people, avrg_income, debt)
-        suggest_budget = person.calculate_budget()
-
-    elif status == "Family":
-        person = Family(nr_of_people, avrg_income, debt)
-        suggest_budget = person.calculate_budget()
-    else:
-        person = Retired(nr_of_people, avrg_income, debt)
-        suggest_budget = person.calculate_budget()
-
-    for key in budget_setup:
-        budget_setup[key].delete(0, tk.END)
-        budget_setup[key].insert(0, suggest_budget[key])
+# ----------calculation buttons---------------------
 
 
 calc_frame = tk.Frame(master=root, borderwidth=5)
@@ -120,15 +156,6 @@ calc_button.pack()
 
 # ---------------budget part----------------------
 
-# budget_setup burde bli hentet fra classen, ikek skrives inn manuelt
-budget_setup = {
-    "Food/drinks": 0,
-    "Clothing": 0,
-    "Travel": 0,
-    "Payments": 0,
-    "Buffer account": 0,
-    "Freetime": 0
-}
 
 budget_frame = tk.Frame(master=root, width=100, height=100, borderwidth=5, relief=tk.SUNKEN)
 budget_frame.grid(row=3, column=0)
@@ -154,7 +181,11 @@ last_frame.grid(row=4, column=0)
 last_frame.columnconfigure(0, minsize=500)
 last_frame.rowconfigure(0, minsize=25)
 
-save_button = tk.Button(master=last_frame, text="Save", relief=tk.RAISED, borderwidth=5)
-save_button.grid(row=0, column=0, sticky="e", padx=5, pady=5)
+approval_label = tk.Label(master=last_frame, text="")
+approval_label.grid(row=0, column=0, sticky="ew")
+
+save_button = tk.Button(master=last_frame, text="Save", relief=tk.RAISED,
+                        borderwidth=5, command=save_info)
+save_button.grid(row=0, column=1, sticky="e", padx=5, pady=5)
 
 root.mainloop()
