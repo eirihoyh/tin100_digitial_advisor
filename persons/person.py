@@ -1,4 +1,4 @@
-from typing import Union
+from typing import Union, Dict
 """HEI"""
 
 class Person:
@@ -46,7 +46,7 @@ class Student(Person):
                          avrg_income=avrg_income,
                          monthly_debt=monthly_debt)
 
-    def calculate_budget(self) -> None:
+    def calculate_budget(self) -> Dict:
         self.budget_setup["Food/drinks"] = 3000 * self.status_constant * self.nr_people
         self.budget_setup["Payments"] = self.monthly_debt
         self.budget_setup["Clothing"] = 500 * self.status_constant * (1 + (self.nr_people/2))
