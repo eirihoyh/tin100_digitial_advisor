@@ -14,11 +14,11 @@ class Person:
     def __init__(self, nr_people: int,
                  avrg_income: Union[int, float],
                  monthly_debt: Union[int, float]) -> None:
-
         self.nr_people = nr_people
         self.avrg_income = avrg_income
         self.monthly_debt = monthly_debt
         self.use_money = int(avrg_income) - int(monthly_debt)
+
 
     def check_budget(self):
         """
