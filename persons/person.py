@@ -71,13 +71,12 @@ class Family(Person):
                          monthly_debt=monthly_debt)
 
     def calculate_budget(self) -> None:
-        self.budget_setup["Food/drinks"] = 3000 * self.status_constant * self.nr_people
+        self.budget_setup["Food/drinks"] = self.use_money * 0.2
         self.budget_setup["Payments"] = self.monthly_debt
-        self.budget_setup["Clothing"] = 500 * self.status_constant * (1 + (self.nr_people / 2))
-        self.budget_setup["Travel"] = 500 * self.status_constant * (1 + (self.nr_people / 2))
-        self.budget_setup["Freetime"] = 500 * self.status_constant * (1 + (self.nr_people / 2))
-        self.budget_setup["Buffer account"] = 500 * self.status_constant * (
-                    1 + (self.nr_people / 2))
+        self.budget_setup["Clothing"] = self.use_money * 0.2
+        self.budget_setup["Travel"] = self.use_money * 0.2
+        self.budget_setup["Freetime"] = self.use_money * 0.3
+        self.budget_setup["Buffer account"] = self.use_money * 0.1
 
         return self.budget_setup
 
@@ -95,12 +94,11 @@ class Retired(Person):
                          monthly_debt=monthly_debt)
 
     def calculate_budget(self) -> None:
-        self.budget_setup["Food/drinks"] = 3000 * self.status_constant * self.nr_people
+        self.budget_setup["Food/drinks"] = self.use_money * 0.2
         self.budget_setup["Payments"] = self.monthly_debt
-        self.budget_setup["Clothing"] = 500 * self.status_constant * (1 + (self.nr_people / 2))
-        self.budget_setup["Travel"] = 500 * self.status_constant * (1 + (self.nr_people / 2))
-        self.budget_setup["Freetime"] = 500 * self.status_constant * (1 + (self.nr_people / 2))
-        self.budget_setup["Buffer account"] = 500 * self.status_constant * (
-                1 + (self.nr_people / 2))
+        self.budget_setup["Clothing"] = self.use_money * 0.2
+        self.budget_setup["Travel"] = self.use_money * 0.3
+        self.budget_setup["Freetime"] = self.use_money * 0.2
+        self.budget_setup["Buffer account"] = self.use_money * 0.1
 
         return self.budget_setup
