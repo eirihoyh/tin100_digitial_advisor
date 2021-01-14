@@ -1,4 +1,7 @@
-from typing import List
+from typing import List, Union
+
+from DNB_psd2 import AISP
+from database_connecter import StoreInDatabase
 
 
 class Transaction:
@@ -17,12 +20,19 @@ class Transaction:
         "your taxes!",
         "If you earn less than 60 000kr this year you will not need to pay taxes!"
     ]
-    def __init__(self, transaction_type):
+    want_to_pay_debt = False
+
+    def __init__(self, transaction_type: str):
 
         if transaction_type == "Payments":
             self.want_to_pay_debt = True
+            self.placement_in_database = 4
+        elif transaction_type == "Food":
+            self.placement_in_database = 1
+        elif transaction_type == "Travel":
+            self.placement_in_database = 3
         else:
-            self.want_to_pay_debt = False
+            NameError(f"Name {transaction_type} is not in database")
 
         self.transaction_type = transaction_type
 
@@ -44,13 +54,41 @@ class Transaction:
         Here I want to calculate to see if the user have gone beyond
         25% (one week) of it's budget
         :return:
+        True if this is the amount spent in one week is under 25% of budget, false else
         """
-        pass
+        data = StoreInDatabase()
+        budget = data.get_data()
+        budget_type = budget[self.placement_in_database]
 
-    def dnb_transaction(self):
+        used_money = self.dnb_transaction()
+
+        ratio = used_money/budget_type
+        print(f"Budget type: {budget_type}\nUsed money: {used_money}\nRatio: {ratio}")
+
+        return ratio < 0.25
+
+    @staticmethod
+    def dnb_transaction() -> Union[int, float]:
         """
         here I want to find information about what transactions a user have been using
         and relate it to transaction_type in database, ge
         :return:
         """
-        pass
+        AISP_client = AISP(PSU_ID="31125458052", pem_path="../../certificate/certificate.pem",
+                           key_path="../../certificate/private.key",
+                           webdriver_path="../../chromedriver_win32/chromedriver.exe")
+        accounts = AISP_client.accounts()
+        transaction_history = AISP_client.get_bank_transactions(bban=f"{accounts[0]}")
+        transactions = transaction_history["transactions"]
+        booked = transactions["booked"]
+        amount = 0
+        for trans in booked:
+            transaction_amount = trans["transactionAmount"]
+            amount += float(transaction_amount["amount"])
+
+        return amount
+
+
+if __name__ == "__main__":
+    k = Transaction("Food")
+    k.calculate_week_ratio()
