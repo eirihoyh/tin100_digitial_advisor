@@ -11,11 +11,12 @@ class Transaction:
     not take into consideration that user is doing many small transactions
     """
     default_positive = "Good job on following budget!"
-    default_negative = "You are going over the budget!"
+    default_negative = "You are going over the budget,\n" \
+                       "you should spend 25% or less of the budget per week!"
 
     tips = [
         "Plan your week before purchasing groceries!",
-        "When visiting Oslo for a day, buy a 24 hours ticket. This will save "
+        "When visiting Oslo for a day, buy a 24 hours ticket.\nThis will save "
         "you 37kr every time you take public transportation after 3 rides",
         "You can now save 27 500kr on your BSU account.\nThis means that you can save 5 500kr on "
         "your taxes!",
@@ -49,18 +50,18 @@ class Transaction:
         ratio = self.calculate_week_ratio()
         tips = random.choice(self.tips)
         if self.want_to_pay_debt == True:
-            if ratio == False:
-                return [self.default_positive, tips]
+            if ratio[0] == False:
+                return [self.default_positive, tips, ratio[1], ratio[2]]
             else:
-                return [self.default_negative, tips]
+                return ["You must pay more to your debt!", tips, ratio[1], ratio[2]]
 
         else:
-            if ratio == True:
-                return [self.default_positive, tips]
+            if ratio[0] == True:
+                return [self.default_positive, tips, ratio[1], ratio[2]]
             else:
-                return [self.default_negative, tips]
+                return [self.default_negative, tips, ratio[1], ratio[2]]
 
-    def calculate_week_ratio(self) -> bool:
+    def calculate_week_ratio(self) -> List[Union[bool, float, int]]:
         """
         Here I want to calculate to see if the user have gone beyond
         25% (one week) of it's budget
@@ -76,7 +77,7 @@ class Transaction:
         ratio = used_money / budget_type
         print(f"Budget type: {budget_type}\nUsed money: {used_money}\nRatio: {ratio}")
 
-        return ratio < 0.25
+        return [ratio < 0.25, budget_type, used_money]
 
     @staticmethod
     def dnb_transaction() -> Union[int, float]:

@@ -5,9 +5,10 @@ from look_at_transactions import Transaction
 
 
 def make_transaction():
-    transaction = Transaction(clicked.get())
+    transaction = Transaction(my_combo.get())
     feedback = transaction.do_transaction()
-    message["text"] = f"{feedback[0]}\nTips: {feedback[1]}"
+    message["text"] = f"Budget for {my_combo.get()} is: {feedback[2]}\nYou spent: {feedback[3]}" \
+                      f"\n\n{feedback[0]}\nTips: {feedback[1]}"
 
 
 root = tk.Tk()
@@ -35,6 +36,9 @@ button.grid(row=0, column=1, sticky="nsew", padx=10, pady=10)
 
 frame1 = tk.Frame(master=root, width=100, height=100, borderwidth=5)
 frame1.grid(row=1, column=0)
+
+frame1.rowconfigure(0, minsize=100, weight=1)
+frame1.columnconfigure(0, minsize=50, weight=1)
 
 message = tk.Label(master=frame1, text="Welcome!")
 message.pack()
