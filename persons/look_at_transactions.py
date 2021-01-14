@@ -1,4 +1,5 @@
 from typing import List, Union
+import random
 
 from DNB_psd2 import AISP
 from database_connecter import StoreInDatabase
@@ -16,9 +17,9 @@ class Transaction:
         "Plan your week before purchasing groceries!",
         "When visiting Oslo for a day, buy a 24 hours ticket. This will save "
         "you 37kr every time you take public transportation after 3 rides",
-        "You can now save 27 500kr on your BSU account. This means that you can save 5 500kr on "
+        "You can now save 27 500kr on your BSU account.\nThis means that you can save 5 500kr on "
         "your taxes!",
-        "If you earn less than 60 000kr this year you will not need to pay taxes!"
+        "If you earn less than 60 000kr this year\nyou will not need to pay taxes!"
     ]
     want_to_pay_debt = False
 
@@ -34,8 +35,6 @@ class Transaction:
         else:
             NameError(f"Name {transaction_type} is not in database")
 
-        self.transaction_type = transaction_type
-
     def do_transaction(self) -> List[str]:
         """
         Uses dnb_transaction and the chosen categories from gui to estimate
@@ -47,7 +46,19 @@ class Transaction:
         :return:
         Returns a a list with two strings that contains a positive/negative message
         """
-        pass
+        ratio = self.calculate_week_ratio()
+        tips = random.choice(self.tips)
+        if self.want_to_pay_debt == True:
+            if ratio == False:
+                return [self.default_positive, tips]
+            else:
+                return [self.default_negative, tips]
+
+        else:
+            if ratio == True:
+                return [self.default_positive, tips]
+            else:
+                return [self.default_negative, tips]
 
     def calculate_week_ratio(self) -> bool:
         """
@@ -62,7 +73,7 @@ class Transaction:
 
         used_money = self.dnb_transaction()
 
-        ratio = used_money/budget_type
+        ratio = used_money / budget_type
         print(f"Budget type: {budget_type}\nUsed money: {used_money}\nRatio: {ratio}")
 
         return ratio < 0.25
@@ -91,4 +102,4 @@ class Transaction:
 
 if __name__ == "__main__":
     k = Transaction("Food")
-    k.calculate_week_ratio()
+    k.do_transaction()

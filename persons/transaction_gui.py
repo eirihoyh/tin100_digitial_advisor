@@ -6,7 +6,8 @@ from look_at_transactions import Transaction
 
 def make_transaction():
     transaction = Transaction(clicked.get())
-    message["text"] = f"{transaction.transaction_type}"
+    feedback = transaction.do_transaction()
+    message["text"] = f"{feedback[0]}\nTips: {feedback[1]}"
 
 
 root = tk.Tk()
