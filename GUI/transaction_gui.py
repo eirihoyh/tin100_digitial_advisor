@@ -1,7 +1,7 @@
 import tkinter as tk
 from tkinter import ttk
 
-from look_at_transactions import Transaction
+from backend_code.look_at_transactions import Transaction
 
 
 def make_transaction():

@@ -1,8 +1,8 @@
 import tkinter as tk
 from tkinter import ttk
 
-from person import Student, Family, Retired
-from database_connecter import StoreInDatabase
+from backend_code.person import Student, Family, Retired
+from backend_code.database_connecter import StoreInDatabase
 
 
 # -------Functions-------------
