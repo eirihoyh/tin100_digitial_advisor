@@ -2,7 +2,7 @@ from typing import List, Union
 import random
 
 from DNB_psd2 import AISP
-from database_connecter import StoreInDatabase
+from backend_code.database_connecter import StoreInDatabase
 
 
 class Transaction:

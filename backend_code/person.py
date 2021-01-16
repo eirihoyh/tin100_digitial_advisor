@@ -1,5 +1,5 @@
 from typing import Union, Dict
-"""HEI"""
+
 
 class Person:
     budget_setup = {
@@ -14,7 +14,6 @@ class Person:
     def __init__(self, nr_people: int,
                  avrg_income: Union[int, float],
                  monthly_debt: Union[int, float]) -> None:
-
         self.nr_people = nr_people
         self.avrg_income = avrg_income
         self.monthly_debt = monthly_debt
@@ -36,13 +35,11 @@ class Person:
 
 
 class Student(Person):
-
     status_constant = 1.4
 
     def __init__(self, nr_people: int,
                  avrg_income: Union[str, float],
                  monthly_debt: Union[str, float]) -> None:
-
         super().__init__(nr_people=nr_people,
                          avrg_income=avrg_income,
                          monthly_debt=monthly_debt)
@@ -59,13 +56,11 @@ class Student(Person):
 
 
 class Family(Person):
-
     status_constant = 1.5
 
     def __init__(self, nr_people: int,
                  avrg_income: Union[int, float],
                  monthly_debt: Union[int, float]) -> None:
-
         super().__init__(nr_people=nr_people,
                          avrg_income=avrg_income,
                          monthly_debt=monthly_debt)
@@ -82,13 +77,11 @@ class Family(Person):
 
 
 class Retired(Person):
-
     status_constant = 0.75
 
     def __init__(self, nr_people: Union[int, float],
                  avrg_income: Union[int, float],
                  monthly_debt: Union[int, float]) -> None:
-
         super().__init__(nr_people=nr_people,
                          avrg_income=avrg_income,
                          monthly_debt=monthly_debt)
