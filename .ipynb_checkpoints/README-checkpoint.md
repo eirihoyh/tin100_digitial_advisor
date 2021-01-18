@@ -1,1 +1,0 @@
-# tin100_digitial_financial_advisor
