@@ -19,19 +19,13 @@ class Person:
         self.monthly_debt = monthly_debt
         self.use_money = float(avrg_income) - float(monthly_debt)
 
-    def check_budget(self):
+    def check_budget(self, amount_used) -> bool:
         """
-        maybe check if budget follows avrg_income and save it to a database
+        Checks if user have input more than avaible amount.
         :return:
         """
-        pass
-
-    def check_if_salary_ok(self) -> bool:
-        amount = 0
-        for item in self.budget_setup.values():
-            amount += item
-
-        return amount <= self.avrg_income
+        print(amount_used, self.avrg_income)
+        return round(amount_used, 2) <= float(self.avrg_income)
 
 
 class Student(Person):

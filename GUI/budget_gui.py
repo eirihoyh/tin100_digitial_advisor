@@ -24,6 +24,9 @@ def decrease():
         label_members["text"] = f"{value - 1}"
 
 
+person = []  # Need to save the person outside the function
+
+
 def calc_budget():
     """
     A function that calculates an estimation for budget using superclass Person
@@ -34,18 +37,18 @@ def calc_budget():
     debt = loan_entry.get()
 
     if status == "Student":
-        person = Student(nr_of_people, avrg_income, debt)
+        person.append(Student(nr_of_people, avrg_income, debt))
 
     elif status == "Family":
-        person = Family(nr_of_people, avrg_income, debt)
+        person.append(Family(nr_of_people, avrg_income, debt))
     else:
-        person = Retired(nr_of_people, avrg_income, debt)
+        person.append(Retired(nr_of_people, avrg_income, debt))
 
-    suggest_budget = person.calculate_budget()
+    suggest_budget = person[-1].calculate_budget()
 
     for key in budget_setup:
         budget_setup[key].delete(0, tk.END)
-        budget_setup[key].insert(0, suggest_budget[key])
+        budget_setup[key].insert(0, round(float(suggest_budget[key]), 2))
 
 
 def save_info():
@@ -55,11 +58,14 @@ def save_info():
     """
     money = []
     for key in budget_setup:
-        money.append(float(budget_setup[key].get()))
+        money.append(round(float(budget_setup[key].get()), 2))
 
-    save = StoreInDatabase()
-    save.insert_data(money[0], money[1], money[2], money[3], money[4], money[5])
-    approval_label["text"] = "Saved!"
+    if not person[-1].check_budget(sum(money)):
+        approval_label["text"] = "Must not go beyond budget"
+    else:
+        save = StoreInDatabase()
+        save.insert_data(money[0], money[1], money[2], money[3], money[4], money[5])
+        approval_label["text"] = "Saved!"
 
 
 # -------standard dictionaries----------
